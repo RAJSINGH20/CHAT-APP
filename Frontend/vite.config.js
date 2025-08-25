@@ -6,4 +6,5 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   // eslint-disable-next-line no-undef
   plugins: [react(), tailwindcss()],
+  
 });

@@ -6,6 +6,8 @@ import cloudinary from "../lib/cloudinary.js";
 export const signup = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
+    const token = req.cookie.jwt||req.headers.authorizaton 
+    console.log(token)
     if (!fullName || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -61,6 +63,7 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
+    
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -116,13 +119,16 @@ export const updateProfile = async (req, res) => {
     res.status(200).json(updatedUser);
     console.log("error ended")
   } catch (error) {
-    console.log("error in update profile:", error);
+    console.log("error in update profile:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
 export const checkAuth = (req, res) => {
   try {
+    console.log('====================================');
+    console.log(req.user);
+    console.log('====================================');
     res.status(200).json(req.user);
   } catch (error) {
     console.log("Error in checkAuth controller", error.message);

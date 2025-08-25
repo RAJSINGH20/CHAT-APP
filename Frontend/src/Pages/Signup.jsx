@@ -3,7 +3,7 @@ import { useAuthStore } from "../Store/UseAuthStore";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import AuthImagePattern from "../components/AuthImagePattern";
+import AuthImagePattern from "../Components/AuthImagePattern.jsx";
 import toast from "react-hot-toast";
 
 const SignUp = () => {

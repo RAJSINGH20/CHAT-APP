@@ -8,7 +8,7 @@ import ProfilePage from "./Pages/Profile";
 
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./Store/UseAuthStore.js";
-import { useThemeStore } from "./Store/useThemeStore.js";
+import useThemeStore from "./Store/useThemeStore.js";
 import { useEffect } from "react";
 
 import { Loader } from "lucide-react";
