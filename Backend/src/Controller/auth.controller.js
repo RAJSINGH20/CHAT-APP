@@ -63,7 +63,7 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    
+    console.log("entered" );    
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -76,7 +76,7 @@ export const login = async (req, res) => {
     }
 
     generateToken(user._id, res);
-
+    console.log("Login successful, token generated");
     res.status(200).json({
       _id: user._id,
       fullName: user.fullName,
