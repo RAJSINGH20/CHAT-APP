@@ -6,9 +6,10 @@ import { getReceiverSocketId, io } from "../lib/socket.js";
 
 export const getUsersForSidebar = async (req, res) => {
   try {
+    console.log("getUsersForSidebar called");
     const loggedInUserId = req.user._id;
     const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
-
+    console.log("getuser success")
     res.status(200).json(filteredUsers);
   } catch (error) {
     console.error("Error in getUsersForSidebar: ", error.message);
@@ -18,6 +19,7 @@ export const getUsersForSidebar = async (req, res) => {
 
 export const getMessages = async (req, res) => {
   try {
+    console.log("getMessages called with params:", req.params);
     const { id: userToChatId } = req.params;
     const myId = req.user._id;
 
@@ -37,6 +39,7 @@ export const getMessages = async (req, res) => {
 
 export const sendMessage = async (req, res) => {
   try {
+    console.log("sendMessage enterd called with params:", req.params);
     const { text, image } = req.body;
     const { id: receiverId } = req.params;
     const senderId = req.user._id;
@@ -61,7 +64,7 @@ export const sendMessage = async (req, res) => {
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("newMessage", newMessage);
     }
-
+    console.log("newMessage saved successfully");
     res.status(201).json(newMessage);
   } catch (error) {
     console.log("Error in sendMessage controller: ", error.message);

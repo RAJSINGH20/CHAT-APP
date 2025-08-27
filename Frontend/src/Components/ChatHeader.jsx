@@ -1,9 +1,9 @@
 import { X } from "lucide-react";
 import { useAuthStore } from "../Store/UseAuthStore.js";
-import { useChatStore } from "../Store/useChatStore";
+import { useChatStore } from "../store/useChatStore.js";
 
 const ChatHeader = () => {
-  const { selectedUser, setSelectedUser } = useChatStore();
+  const { selectedUsers, setselectedUsers } = useChatStore();
   const { onlineUsers } = useAuthStore();
 
   return (
@@ -13,21 +13,21 @@ const ChatHeader = () => {
           {/* Avatar */}
           <div className="avatar">
             <div className="size-10 rounded-full relative">
-              <img src={selectedUser.profilePic || "/avatar.png"} alt={selectedUser.fullName} />
+              <img src={selectedUsers.profilePic || "/avatar.png"} alt={selectedUsers.fullName} />
             </div>
           </div>
 
           {/* User info */}
           <div>
-            <h3 className="font-medium">{selectedUser.fullName}</h3>
+            <h3 className="font-medium">{selectedUsers.fullName}</h3>
             <p className="text-sm text-base-content/70">
-              {onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}
+              {onlineUsers.includes(selectedUsers._id) ? "Online" : "Offline"}
             </p>
           </div>
         </div>
 
         {/* Close button */}
-        <button onClick={() => setSelectedUser(null)}>
+        <button onClick={() => setselectedUsers(null)}>
           <X />
         </button>
       </div>

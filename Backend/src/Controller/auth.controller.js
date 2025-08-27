@@ -63,7 +63,7 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    console.log("entered" );    
+    console.log(" login entered" );    
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -91,6 +91,7 @@ export const login = async (req, res) => {
 
 export const logout = (req, res) => {
   try {
+    console.log("Logout entered");
     res.cookie("jwt", "", { maxAge: 0 });
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
@@ -101,7 +102,8 @@ export const logout = (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    console.log("error started")
+    console.log("update profile entered")
+
     const { profilePic } = req.body;
     const userId = req.user._id;
     
@@ -117,7 +119,7 @@ export const updateProfile = async (req, res) => {
     );
     
     res.status(200).json(updatedUser);
-    console.log("error ended")
+    console.log("update profile ended");
   } catch (error) {
     console.log("error in update profile:", error.message);
     res.status(500).json({ message: "Internal server error" });

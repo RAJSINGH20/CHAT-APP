@@ -1,18 +1,18 @@
-import { useChatStore } from "../Store/useChatStore.js";
+import { useChatStore } from "../store/useChatStore.js";
 import { useEffect, useRef } from "react";
 
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
 import { formatMessageTime } from "../lib/utils";
-import { useAuthStore } from "../Store/useAuthStore.js";
+import { useAuthStore } from "../Store/UseAuthStore.js";
 
 const ChatContainer = () => {
   const {
-    messages,
+    message,
     getMessages,
     isMessagesLoading,
-    selectedUser,
+    selectedUsers,
     subscribeToMessages,
     unsubscribeFromMessages,
   } = useChatStore();
@@ -21,20 +21,20 @@ const ChatContainer = () => {
 
   // Load messages when user changes
   useEffect(() => {
-    if (!selectedUser?._id) return;
+    if (!selectedUsers?._id) return;
 
-    getMessages(selectedUser._id);
-    subscribeToMessages();
+    getMessages(selectedUsers._id);
+    subscribeToMessages
 
-    return () => unsubscribeFromMessages();
-  }, [selectedUser?._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
+    return () => unsubscribeFromMessages;
+  }, [selectedUsers?._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
 
   // Auto scroll to bottom when new messages arrive
   useEffect(() => {
     if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages]);
+  }, [message]);
 
   if (isMessagesLoading) {
     return (
@@ -46,7 +46,7 @@ const ChatContainer = () => {
     );
   }
 
-  if (!selectedUser) {
+  if (!selectedUsers) {
     return (
       <div className="flex-1 flex items-center justify-center text-zinc-500">
         Select a chat to start messaging
@@ -59,7 +59,7 @@ const ChatContainer = () => {
       <ChatHeader />
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message) => (
+        {message.map((message) => (
           <div
             key={message._id}
             className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
@@ -70,7 +70,7 @@ const ChatContainer = () => {
                   src={
                     message.senderId === authUser._id
                       ? authUser.profilePic || "/avatar.png"
-                      : selectedUser.profilePic || "/avatar.png"
+                      : selectedUsers.profilePic || "/avatar.png"
                   }
                   alt="profile pic"
                 />

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useChatStore } from "../Store/useChatStore";
+import { useChatStore } from "../store/useChatStore.js";
 import { Image, Send, X } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -7,7 +7,7 @@ const MessageInput = () => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
-  const { sendMessage } = useChatStore();
+  const { getMessages } = useChatStore();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -33,11 +33,12 @@ const MessageInput = () => {
     if (!text.trim() && !imagePreview) return;
 
     try {
-      await sendMessage({
+      await getMessages({
         text: text.trim(),
         image: imagePreview,
       });
-
+      
+      console.log("Sending message:", { text: text.trim(), image: imagePreview });
       // Clear form
       setText("");
       setImagePreview(null);
