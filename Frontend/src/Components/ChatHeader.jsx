@@ -1,8 +1,8 @@
 import { X } from "lucide-react";
 import { useAuthStore } from "../Store/UseAuthStore.js";
-import { useChatStore } from "../store/useChatStore.js";
+import { useChatStore } from "../Store/useChatStore.js";
 
-const ChatHeader = () => {
+function ChatHeader() {
   const { selectedUsers, setselectedUsers } = useChatStore();
   const { onlineUsers } = useAuthStore();
 
@@ -33,5 +33,5 @@ const ChatHeader = () => {
       </div>
     </div>
   );
-};
+}
 export default ChatHeader;

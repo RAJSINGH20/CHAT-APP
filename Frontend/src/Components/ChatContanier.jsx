@@ -1,4 +1,4 @@
-import { useChatStore } from "../store/useChatStore.js";
+import { useChatStore } from "../Store/useChatStore.js";
 import { useEffect, useRef } from "react";
 
 import ChatHeader from "./ChatHeader";
@@ -24,7 +24,7 @@ const ChatContainer = () => {
     if (!selectedUsers?._id) return;
 
     getMessages(selectedUsers._id);
-    subscribeToMessages
+    subscribeToMessages()
 
     return () => unsubscribeFromMessages;
   }, [selectedUsers?._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);

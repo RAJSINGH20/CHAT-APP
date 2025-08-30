@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useChatStore } from "../store/useChatStore.js";
+import { useChatStore } from "../Store/useChatStore.js";
 import { Image, Send, X } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -31,7 +31,6 @@ const MessageInput = () => {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!text.trim() && !imagePreview) return;
-
     try {
       await getMessages({
         text: text.trim(),
@@ -43,6 +42,7 @@ const MessageInput = () => {
       setText("");
       setImagePreview(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
+      console.log("enterd handle send message in messageinput.jsx")
     } catch (error) {
       console.error("Failed to send message:", error);
     }
