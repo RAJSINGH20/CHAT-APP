@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
+import axios from "axios";
 const BASE_URL =
   import.meta.env.MODE === "development" ? "http://localhost:3000" : "/";
 
@@ -71,7 +72,7 @@ export const useAuthStore = create((set, get) => ({
   updateProfile: async (data) => {
     set({ isUpdatingProfile: true });
     try {
-      const res = await axiosInstance.put("/auth/updateprofile", data);
+      const res = await axios.put("/auth/updateprofile", data);
       set({ authUser: res.data });
       toast.success("Profile updated successfully");
     } catch (error) {
