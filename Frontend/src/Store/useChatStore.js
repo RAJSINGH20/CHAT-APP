@@ -28,9 +28,9 @@ export const useChatStore = create((set,get) => ({
     try {
       const res = await axios.get(`/api/messages/${userId}`);
 
+      set({ Message: res.data, message: res.data });
       console.log("Fetching messages for userId:", userId, "Current selectedUser:", get().selectedUsers)
-      set({ messages: res.data });
-      console.log("get message sucess", res);
+      console.log("get message success", res);
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
@@ -39,27 +39,43 @@ export const useChatStore = create((set,get) => ({
 
   },
   sendMessage: async (messageData) => {
-    const { selectedUser,   message } = get();
-    try {
-      const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
-      set({ message: [...message, res.data] });
-      console.log("send message sucess", res);
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
-  },
+  const { selectedUsers, message } = get(); // renamed for clarity
+  try {
+    console.log("sending message", messageData, "to user:", selectedUsers);
+    // POST because you're creating/sending
+    console.log("send...................................")
+    const res = await axiosInstance.post(`/messages/send/${selectedUsers._id}`, messageData);
+    
+    // append the new message payload
+    set({ message: [...message, res.data] });
+
+    console.log("send message success", res.data);
+  } catch (error) {
+    toast.error(error?.response?.data?.message || "Failed to send");
+  }
+},
+
   subscribeToMessages: () => {
-    const { selectedUser } = get();
-    if (!selectedUser) return;
+    const { selectedUsers } = get();
+    if (!selectedUsers) return;
 
     const socket = useAuthStore.getState().socket;
 
+    // Remove any previous listener to avoid duplicates
+    socket.off("newMessage");
+
     socket.on("newMessage", (newMessage) => {
-      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
-      if (!isMessageSentFromSelectedUser) return;
+      // Only add messages from the currently selected user (either sent or received)
+      const { selectedUsers, message } = get();
+      if (
+      !selectedUsers ||
+      (newMessage.senderId !== selectedUsers._id && newMessage.receiverId !== selectedUsers._id)
+      ) {
+      return;
+      }
 
       set({
-        messages: [...get().messages, newMessage],
+      message: [...message, newMessage],
       });
     });
   },

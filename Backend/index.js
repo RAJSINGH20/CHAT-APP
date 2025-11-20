@@ -23,6 +23,8 @@ app.use(
     credentials: true,
   })
 );
+app.use(express.json({ limit: "1000mb" }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);

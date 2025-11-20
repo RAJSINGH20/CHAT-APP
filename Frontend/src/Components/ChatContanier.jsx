@@ -1,11 +1,11 @@
-import { useChatStore } from "../Store/useChatStore.js";
+import { useChatStore } from "../Store/useChatStore";
+import { useAuthStore } from "../Store/UseAuthStore";
 import { useEffect, useRef } from "react";
 
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
 import { formatMessageTime } from "../lib/utils";
-import { useAuthStore } from "../Store/UseAuthStore.js";
 
 const ChatContainer = () => {
   const {
@@ -19,19 +19,16 @@ const ChatContainer = () => {
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
 
-  // Load messages when user changes
   useEffect(() => {
-    if (!selectedUsers?._id) return;
-
     getMessages(selectedUsers._id);
-    subscribeToMessages()
 
-    return () => unsubscribeFromMessages;
-  }, [selectedUsers?._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
+    subscribeToMessages();
 
-  // Auto scroll to bottom when new messages arrive
+    return () => unsubscribeFromMessages();
+  }, [selectedUsers._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
+
   useEffect(() => {
-    if (messageEndRef.current) {
+    if (messageEndRef.current && message && Array.isArray(message) && message.length > 0) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [message]);
@@ -46,23 +43,16 @@ const ChatContainer = () => {
     );
   }
 
-  if (!selectedUsers) {
-    return (
-      <div className="flex-1 flex items-center justify-center text-zinc-500">
-        Select a chat to start messaging
-      </div>
-    );
-  }
-
   return (
     <div className="flex-1 flex flex-col overflow-auto">
       <ChatHeader />
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {message.map((message) => (
+        {(Array.isArray(message) ? message : []).map((message) => (
           <div
             key={message._id}
             className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
+            ref={messageEndRef}
           >
             <div className=" chat-image avatar">
               <div className="size-10 rounded-full border">
@@ -93,13 +83,10 @@ const ChatContainer = () => {
             </div>
           </div>
         ))}
-        {/* Scroll anchor */}
-        <div ref={messageEndRef} />
       </div>
 
       <MessageInput />
     </div>
   );
 };
-
 export default ChatContainer;

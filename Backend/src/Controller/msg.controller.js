@@ -28,17 +28,17 @@ export const getMessages = async (req, res) => {
     const { id: userToChatId } = req.params;   // this should be a string
     const myId = req.user._id;                 // ObjectId from token middleware
 
-    console.log("myId: ", myId);
-    console.log("userToChatId: ", userToChatId);
-
-    const messages = await Message.find({
+    
+    const message = await Message.find({
       $or: [
         { senderId: myId, receiverId: userToChatId },
         { senderId: userToChatId, receiverId: myId },
       ],
     });
-
-    res.status(200).json(messages);
+    
+    res.status(200).json(message);
+    console.log("myId: ", myId);
+    console.log("userToChatId: ", userToChatId);
   } catch (error) {
     console.log("Error in getMessages controller: ", error);
     res.status(500).json({ error: "Internal server error" });
@@ -54,7 +54,6 @@ export const sendMessage = async (req, res) => {
 
     let imageUrl;
     if (image) {
-      // Upload base64 image to cloudinary
       const uploadResponse = await cloudinary.uploader.upload(image);
       imageUrl = uploadResponse.secure_url;
     }
@@ -75,7 +74,8 @@ export const sendMessage = async (req, res) => {
 
     res.status(201).json(newMessage);
   } catch (error) {
-    console.log("Error in sendMessage controller: ", error.message);
+    console.log("Error in sendMessage controller:", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
