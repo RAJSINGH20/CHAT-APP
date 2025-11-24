@@ -25,10 +25,20 @@ const ChatContainer = () => {
     subscribeToMessages();
 
     return () => unsubscribeFromMessages();
-  }, [selectedUsers._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
+  }, [
+    selectedUsers._id,
+    getMessages,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+  ]);
 
   useEffect(() => {
-    if (messageEndRef.current && message && Array.isArray(message) && message.length > 0) {
+    if (
+      messageEndRef.current &&
+      message &&
+      Array.isArray(message) &&
+      message.length > 0
+    ) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [message]);
@@ -48,17 +58,19 @@ const ChatContainer = () => {
       <ChatHeader />
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {(Array.isArray(message) ? message : []).map((message) => (
+        {message.map((msg, index) => (
           <div
-            key={message._id}
-            className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
-            ref={messageEndRef}
+            key={msg._id || `${msg.senderId}-${msg.createdAt}`}
+            className={`chat ${
+              msg.senderId === authUser._id ? "chat-end" : "chat-start"
+            }`}
+            ref={index === message.length - 1 ? messageEndRef : null} // only last message gets the ref
           >
-            <div className=" chat-image avatar">
+            <div className="chat-image avatar">
               <div className="size-10 rounded-full border">
                 <img
                   src={
-                    message.senderId === authUser._id
+                    msg.senderId === authUser._id
                       ? authUser.profilePic || "/avatar.png"
                       : selectedUsers.profilePic || "/avatar.png"
                   }
@@ -68,18 +80,18 @@ const ChatContainer = () => {
             </div>
             <div className="chat-header mb-1">
               <time className="text-xs opacity-50 ml-1">
-                {formatMessageTime(message.createdAt)}
+                {formatMessageTime(msg.createdAt)}
               </time>
             </div>
             <div className="chat-bubble flex flex-col">
-              {message.image && (
+              {msg.image && (
                 <img
-                  src={message.image}
+                  src={msg.image}
                   alt="Attachment"
                   className="sm:max-w-[200px] rounded-md mb-2"
                 />
               )}
-              {message.text && <p>{message.text}</p>}
+              {msg.text && <p>{msg.text}</p>}
             </div>
           </div>
         ))}

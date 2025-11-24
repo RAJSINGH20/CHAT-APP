@@ -9,7 +9,7 @@ export const useChatStore = create((set,get) => ({
   users: [],
   selectedUsers: null,
   isuserLoading: false,
-  ismessagesLoading: false,
+  isMessagesLoading: false,
 
   getusers: async () => {
     set({ isuserLoading: true });
@@ -24,15 +24,16 @@ export const useChatStore = create((set,get) => ({
   },
 
   getMessages: async (userId) => {
-    set({ isMessagesLoading: true });
+    set({ isMessagesLoading: true, message: [] });
     try {
-      const res = await axios.get(`/api/messages/${userId}`);
+      const res = await axiosInstance.get(`/messages/${userId}`);
 
-      set({ Message: res.data, message: res.data });
+      // Ensure that message is always an array
+      set({ message: Array.isArray(res.data) ? res.data : [] });
       console.log("Fetching messages for userId:", userId, "Current selectedUser:", get().selectedUsers)
       console.log("get message success", res);
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Failed to fetch messages");
     } finally {
       set({ isMessagesLoading: false });
     }
