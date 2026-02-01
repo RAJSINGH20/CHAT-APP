@@ -7,12 +7,12 @@ import SettingsPage from "./Pages/Setting";
 import ProfilePage from "./Pages/Profile";
 
 import { Routes, Route, Navigate } from "react-router-dom";
-import useThemeStore from "./Store/useThemeStore.js";
+import useThemeStore from "./store/useThemeStore.js";
 import { useEffect } from "react";
 
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
-import { useAuthStore } from "./Store/useAuthStore.js";
+import { useAuthStore } from "./store/useAuthStore.js";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();

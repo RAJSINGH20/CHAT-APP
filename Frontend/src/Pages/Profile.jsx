@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuthStore } from "../Store/useAuthStore.js"; // ✅ fixed typo
+import { useAuthStore } from "../store/useAuthStore.js"; // ✅ fixed typo
 import { Camera, Mail, User } from "lucide-react";
 
 const ProfilePage = () => {
