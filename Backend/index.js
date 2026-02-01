@@ -28,7 +28,7 @@ app.use(express.json({ limit: "1000mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/api/ping", (req, res) => {
-  res.status(200).json({ message: "pong" });
+  res.status(200).json({ message: "ping" });
 });
 
 app.use("/api/auth", authRoutes);
